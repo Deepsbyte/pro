@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Portal Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Comic Neue', cursive;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;700&display=swap');
+  </style>
+</head>
+<body class="bg-pink-100 min-h-screen flex flex-col items-center justify-center px-4">
+
+  <!-- Registration Box -->
+  <div class="bg-white shadow-lg rounded-3xl p-8 w-full max-w-lg mb-6" id="register-box" style="display: none;">
+    <img src="https://kssem.edu.in/img/logo.jpg" alt="College Logo" class="w-40 h-auto mx-auto mb-4" />
+    <h1 class="text-3xl font-bold text-pink-700 text-center mb-4">Student Registration</h1>
+    <form id="register-form" class="space-y-4">
+      <div>
+        <label for="reg-usn" class="block text-pink-800 font-medium">USN</label>
+        <input type="text" id="reg-usn" name="reg-usn" placeholder="Enter your USN" required
+               class="w-full border border-pink-300 p-2 rounded-lg focus:ring-2 focus:ring-pink-400">
+      </div>
+      <div>
+        <label for="reg-password" class="block text-pink-800 font-medium">Password</label>
+        <input type="password" id="reg-password" name="reg-password" placeholder="Create a password" required
+               class="w-full border border-pink-300 p-2 rounded-lg focus:ring-2 focus:ring-pink-400">
+      </div>
+      <div>
+        <label for="confirm-password" class="block text-pink-800 font-medium">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required
+               class="w-full border border-pink-300 p-2 rounded-lg focus:ring-2 focus:ring-pink-400">
+      </div>
+      <button type="submit"
+              class="w-full bg-pink-500 text-white font-bold py-2 rounded-full hover:bg-pink-600 transition">
+        Register
+      </button>
+      <p class="text-center text-sm text-gray-600">Already have an account? <a href="#" id="show-login" class="text-pink-600 font-bold">Login</a></p>
+    </form>
+    <p id="register-error" class="text-red-500 text-sm mt-2"></p>
+  </div>
+
+  <!-- Login Box -->
+  <div class="bg-white shadow-lg rounded-3xl p-8 w-full max-w-lg" id="login-container">
+    <img src="https://kssem.edu.in/img/logo.jpg" alt="College Logo" class="w-40 h-auto mx-auto mb-4" />
+    <h1 class="text-3xl font-bold text-pink-700 text-center mb-4">Student Portal Login</h1>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label for="usn" class="block text-pink-800 font-medium">USN</label>
+        <input type="text" id="usn" name="usn" placeholder="Enter your USN" required
+               class="w-full border border-pink-300 p-2 rounded-lg focus:ring-2 focus:ring-pink-400">
+      </div>
+      <div>
+        <label for="password" class="block text-pink-800 font-medium">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required
+               class="w-full border border-pink-300 p-2 rounded-lg focus:ring-2 focus:ring-pink-400">
+      </div>
+      <button type="submit"
+              class="w-full bg-pink-500 text-white font-bold py-2 rounded-full hover:bg-pink-600 transition">
+        Login
+      </button>
+    </form>
+    <p class="text-center text-sm text-gray-600 mt-4">Don't have an account? <a href="#" id="show-register" class="text-pink-600 font-bold">Register</a></p>
+    <p id="error-message" class="text-red-500 text-sm mt-2"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
