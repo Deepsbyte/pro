@@ -1,170 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Class Chat</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <title>Class Chat - Real-Time</title>
   <style>
     body {
-      background-color: #f9f5f0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-
     .chat-container {
-      max-width: 700px;
-      margin: 40px auto;
-      background-color: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      background: white;
+      width: 400px;
+      max-height: 600px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      height: 85vh;
       overflow: hidden;
     }
-
     .chat-header {
-      padding: 16px 20px;
-      background: linear-gradient(135deg, #4a90e2, #00796b);
+      background: #6C63FF;
       color: white;
-      font-size: 20px;
-      font-weight: 600;
-      border-top-left-radius: 16px;
-      border-top-right-radius: 16px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
     }
-
-    .chat-messages {
-      flex-grow: 1;
+    .chat-box {
+      flex: 1;
+      padding: 10px;
       overflow-y: auto;
-      padding: 20px;
-      background-color: #f0fdf4;
     }
-
     .message {
-      margin-bottom: 18px;
-      max-width: 70%;
-      padding: 12px 16px;
+      margin: 8px 0;
+      padding: 10px;
       border-radius: 12px;
-      position: relative;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-      font-size: 15px;
-      line-height: 1.5;
+      max-width: 70%;
     }
-
-    .message .meta {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-
-    .message.outgoing {
-      background-color: #d1f5e0;
+    .message.you {
+      background: #e2e2ff;
       align-self: flex-end;
-      border-bottom-right-radius: 0;
-      color: #064e3b;
     }
-
-    .message.incoming {
-      background-color: #ffffff;
+    .message.other {
+      background: #d3f4d1;
       align-self: flex-start;
-      border-bottom-left-radius: 0;
-      color: #333;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-
     .chat-input {
       display: flex;
-      padding: 14px 16px;
-      background-color: #fafafa;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid #ddd;
     }
-
-    .chat-input input {
-      flex-grow: 1;
-      border: 1px solid #ccc;
-      padding: 10px 16px;
-      border-radius: 25px;
-      margin-right: 10px;
-      outline: none;
-      font-size: 14px;
-      background-color: #ffffff;
-      transition: border-color 0.3s ease;
-    }
-
-    .chat-input input:focus {
-      border-color: #4a90e2;
-    }
-
-    .chat-input button {
+    input {
+      flex: 1;
       border: none;
-      background: linear-gradient(135deg, #4a90e2, #00796b);
-      color: white;
-      border-radius: 50%;
-      padding: 12px 16px;
+      padding: 12px;
       font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: background 0.3s ease;
+      outline: none;
     }
-
-    .chat-input button:hover {
-      background: linear-gradient(135deg, #3b7cc2, #00695c);
+    button {
+      padding: 12px;
+      background: #6C63FF;
+      color: white;
+      border: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div class="chat-header">
-      IV CSE A – Class Chat
+    <div class="chat-header">Class Chat</div>
+    <div class="chat-box" id="messages"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
     </div>
-
-    <div class="chat-messages" id="chat">
-      <div class="message incoming">
-        <div class="meta">Gagana • 10:20 AM</div>
-        Is lab internal postponed or not? 😩
-      </div>
-
-      <div class="message outgoing">
-        <div class="meta">You • 10:22 AM</div>
-        Yes, confirmed by HOD. New date is next Friday.
-      </div>
-
-      <div class="message incoming">
-        <div class="meta">Harshith • 10:23 AM</div>
-        Broooo thanks da 😮‍💨
-      </div>
-    </div>
-
-    <form class="chat-input" onsubmit="sendMessage(event)">
-      <input type="text" id="messageInput" placeholder="Type a message..." />
-      <button type="submit">➤</button>
-    </form>
   </div>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
   <script>
-    function sendMessage(event) {
-      event.preventDefault();
-      const input = document.getElementById("messageInput");
-      const msg = input.value.trim();
-      if (msg === "") return;
+    // Replace with your own Firebase config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-      const chat = document.getElementById("chat");
-      const messageElem = document.createElement("div");
-      messageElem.classList.add("message", "outgoing");
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-      const time = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
+    const messagesRef = db.ref("class-messages");
 
-      messageElem.innerHTML = `<div class="meta">You • ${time}</div>${msg}`;
-      chat.appendChild(messageElem);
-      input.value = "";
-      chat.scrollTop = chat.scrollHeight;
+    const user = "User" + Math.floor(Math.random() * 1000); // temporary user
+
+    document.getElementById("messageInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    function sendMessage() {
+      const msg = document.getElementById("messageInput").value.trim();
+      if (msg !== "") {
+        messagesRef.push({ user, text: msg, time: Date.now() });
+        document.getElementById("messageInput").value = "";
+      }
     }
+
+    messagesRef.on("child_added", (data) => {
+      const msg = data.val();
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "message " + (msg.user === user ? "you" : "other");
+      msgDiv.textContent = msg.user + ": " + msg.text;
+      document.getElementById("messages").appendChild(msgDiv);
+      document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+    });
   </script>
 </body>
 </html>
