@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Portal Login</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background: #ffeef8;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, p {
+      margin: 0.5em 0;
+    }
+
+    .login-container, .register-box, .portal-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .login-box, .register-box {
+      background: white;
+      padding: 2em;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin: 1em 0;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3em;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.6em;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .login-btn, .register-btn, .logout-btn {
+      background: #ff77aa;
+      color: white;
+      padding: 0.7em 1.5em;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+
+    .switch-form {
+      margin-top: 1em;
+      font-size: 0.9em;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      padding: 20px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1em;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .dashboard-card:hover {
+      transform: scale(1.05);
+      background: #ffeff8;
+    }
+
+    .portal-header {
+      background: #ffcce0;
+      padding: 1em;
+      width: 100%;
+      text-align: center;
+    }
+
+    .portal-footer {
+      text-align: center;
+      padding: 1em;
+      font-size: 0.8em;
+      color: gray;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    .welcome-message {
+      text-align: center;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+<div class="register-box" id="register-box" style="display: none;">
+    <h1>Student Registration</h1>
+    <img src="https://kssem.edu.in/img/logo.jpg" alt="College Logo" class="w-40 h-auto mx-auto mb-4" />
+    <form id="register-form">
+      <div class="input-group">
+        <label for="reg-usn">USN</label>
+        <input type="text" id="reg-usn" required>
+      </div>
+      <div class="input-group">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" required>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" required>
+      </div>
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+    <p class="switch-form">Already have an account? <a href="#" id="show-login">Login</a></p>
+    <p id="register-error" class="error-message"></p>
+  </div>
+
+  <div class="login-container" id="login-container">
+    <div class="login-box">
+      <h1>KSSEM Student Portal Login</h1>
+      <img scr="https://kssem.edu.in/img/logo.jpg">
+      <form id="login-form">
+        <div class="input-group">
+          <label for="usn">USN</label>
+          <input type="text" id="usn" required>
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+      <p class="switch-form">Don't have an account? <a href="#" id="show-register">Register</a></p>
+      <p id="error-message" class="error-message"></p>
+    </div>
+  </div>
+
+ 
+  <div class="portal-container" id="portal-container" style="display: none;">
+    <header class="portal-header">
+      <h2 id="welcome-user">Welcome!</h2>
+      <button class="logout-btn" id="logout-btn"">Logout</button>
+    </header>
+    <main>
+      <div class="welcome-message">
+        <p>Choose a section from below to begin with your stuff</p>
+      </div>
+       <div class="dashboard-grid">
+      <a href="academic-calendar.html" class="dashboard-card" >📅<br>Academic Calendar</a>
+      <a href="time-table.html" class="dashboard-card">🕒<br>Time Table</a>
+      <a href="attendance.html" class="dashboard-card">✅<br>Attendance</a>
+      <a href="announcement.html" class="dashboard-card">📢<br>Announcement</a>
+      <a href="exam-schedule.html" class="dashboard-card">🧾<br>Exam Schedule</a>
+      <a href="results.html" class="dashboard-card">🎓<br>Results</a>
+      <a href="fees.html" class="dashboard-card">💸<br>Fees</a>
+    </div>
+    </main>
+    <footer class="portal-footer">
+      Made for the cutestt students!
+    </footer>
+  </div>
+
+  <script>
+  
+    document.getElementById("show-register").onclick = () => {
+      document.getElementById("login-container").style.display = "none";
+      document.getElementById("register-box").style.display = "flex";
+    };
+    document.getElementById("show-login").onclick = () => {
+      document.getElementById("register-box").style.display = "none";
+      document.getElementById("login-container").style.display = "flex";
+    };
+
+  
+    document.getElementById("register-form").onsubmit = function (e) {
+      e.preventDefault();
+      const usn = document.getElementById("reg-usn").value;
+      const pass = document.getElementById("reg-password").value;
+      const confirm = document.getElementById("confirm-password").value;
+
+      if (pass !== confirm) {
+        document.getElementById("register-error").textContent = "Passwords don't match!";
+        return;
+      }
+
+      localStorage.setItem(usn, pass);
+      alert("Registered successfully! Please login.");
+      document.getElementById("register-box").style.display = "none";
+      document.getElementById("login-container").style.display = "flex";
+    };
+
+   
+    document.getElementById("login-form").onsubmit = function (e) {
+      e.preventDefault();
+      const usn = document.getElementById("usn").value;
+      const pass = document.getElementById("password").value;
+      const storedPass = localStorage.getItem(usn);
+
+      if (storedPass === pass) {
+        sessionStorage.setItem("usn", usn);
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("portal-container").style.display = "flex";
+        document.getElementById("welcome-user").textContent = `Welcome, ${usn}!`;
+      } else {
+        document.getElementById("error-message").textContent = "Invalid USN or password.";
+      }
+    };
+
+  
+    window.onload = () => {
+      const usn = sessionStorage.getItem("usn");
+      if (usn) {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("portal-container").style.display = "flex";
+        document.getElementById("welcome-user").textContent = `Welcome, ${usn}!`;
+      }
+    };
+
+    
+    document.getElementById("logout-btn").onclick = () => {
+      sessionStorage.removeItem("usn");
+      location.reload();
+    };
+  </script>
+</body>
+</html>
